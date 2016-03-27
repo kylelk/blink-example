@@ -1,0 +1,11 @@
+project blink_example is
+    for Source_Dirs use ("src");
+    for Object_Dir use "obj";
+    for Main use ("main.adb");
+    package Compiler is
+        for Default_switches ("Ada") use (
+                "-gnat2012",
+                "-Wall",
+                "-O2");
+    end Compiler;
+end blink_example;
