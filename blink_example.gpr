@@ -8,4 +8,8 @@ project blink_example is
                 "-Wall",
                 "-O2");
     end Compiler;
+
+    package Builder is
+        for Executable ("main.adb") use "blink_example";
+    end Builder;
 end blink_example;
