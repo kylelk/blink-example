@@ -1,4 +1,4 @@
-An example of how to make an raspberry pi LED blink, Written in Ada.
+An example of how to make an raspberry pi LED blink, Written in the Ada programming language.
 
 ## building
 
