@@ -7,7 +7,6 @@ procedure main is
    Pin_Num     : constant GPIO.Pin_Number := 0;
    Button_Pin  : constant GPIO.Pin_Number := 1;
    Blink_Delay : constant Float           := 0.25;
-   Click_Count : Integer                  := 0;
 
    type LED_Modes is (LED_Off, LED_Blink, LED_On);
 
@@ -48,7 +47,6 @@ procedure main is
    procedure Button_Clicked is
    begin
       if Down_Press then
-         Click_Count := Click_Count + 1;
          TIO.Put_Line ("button clicked " & LED_Modes'Image (Light_Mode));
          Light.Mode (Light_Mode);
          if Light_Mode = LED_Modes'Last then
