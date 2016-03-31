@@ -16,9 +16,13 @@ procedure main is
    end Blinking_Light;
 
    task body Blinking_Light is
-      Current_Mode : LED_Modes := LED_On;
+      Current_Mode : LED_Modes := LED_Off;
    begin
       loop
+         accept Mode (Mode_Value : LED_Modes) do
+            Current_Mode := Mode_Value;
+         end Mode;
+        
          if Current_Mode = LED_Off then
             GPIO.Digital_Write (Pin_Num, GPIO.Low);
             
@@ -29,30 +33,38 @@ procedure main is
             delay Duration (Blink_Delay);
             
          elsif Current_Mode = LED_On then
-            GPIO.Digital_Write (Pin_Num, GPIO.Low);
-         end if;
-         
-         accept Mode (Mode_Value : LED_Modes) do
-            Current_Mode := Mode_Value;
-         end Mode;
+            GPIO.Digital_Write (Pin_Num, GPIO.High);
+         end if; 
       end loop;
    end Blinking_Light;
-   
+  
+   Light : Blinking_Light;
+   Light_Mode : LED_Modes := LED_Off;
+   Down_Press : Boolean := True;
+
    procedure Button_Clicked is
    begin
-      Click_Count := Click_Count + 1;
-      TIO.Put_Line ("button clicked " & Click_Count'Img);
+       if down_press then
+          Click_Count := Click_Count + 1;
+          TIO.Put_Line ("button clicked " & LED_Modes'Image(Light_Mode));
+          Light.Mode(Light_Mode);
+          if Light_Mode = LED_Modes'Last then
+              Light_Mode := LED_Modes'First;
+          else
+              Light_Mode := LED_Modes'Val(LED_Modes'Pos(Light_Mode)+1);
+          end if;
+        end if;
+        Down_Press := not down_press;
    end Button_Clicked;
    
-   Light : Blinking_Light;
 begin
    GPIO.Setup;
    GPIO.Pin_Mode (Pin_Num, GPIO.Output);
    GPIO.Pin_Mode (Button_Pin, GPIO.Input);
 
-   -- GPIO.Pin_Interrupt (Button_Pin, GPIO.Edge_Falling, Button_Clicked'Access);
+   GPIO.Pin_Interrupt (Button_Pin, GPIO.Edge_Both, Button_Clicked'Access);
    
-   Light.Mode(LED_On);
+   --Light.Mode(LED_On);
    
    -- loop
    --   GPIO.Digital_Write(Pin_Num, GPIO.High);
