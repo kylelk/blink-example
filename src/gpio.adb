@@ -25,4 +25,12 @@ package body GPIO is
    begin
       return Pin_Value'Val(WiringPi_H.DigitalRead(Int(Pin)));
    end Digital_Read;
+
+   procedure Pin_Interrupt(Pin : Pin_Number; Edge_Type : Pin_Edge_Type; Callback : access procedure) is
+      Result : Int;
+      pragma Unreferenced (Result);
+      Edge_Type_Int : constant Int := Int(Pin_Edge_Type'Pos(Edge_Type));
+   begin
+      Result := WiringPi_H.wiringPiISR(Int(Pin), Edge_Type_Int, Callback);
+   end Pin_Interrupt;
 end GPIO;
