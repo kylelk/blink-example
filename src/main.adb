@@ -19,22 +19,25 @@ procedure main is
       Current_Mode : LED_Modes := LED_Off;
    begin
       loop
-         accept Mode (Mode_Value : LED_Modes) do
-            Current_Mode := Mode_Value;
-         end Mode;
-        
-         if Current_Mode = LED_Off then
-            GPIO.Digital_Write (Pin_Num, GPIO.Low);
-            
-         elsif Current_Mode = LED_Blink then
-            GPIO.Digital_Write (Pin_Num, GPIO.High);
-            delay Duration (Blink_Delay);
-            GPIO.Digital_Write (Pin_Num, GPIO.Low);
-            delay Duration (Blink_Delay);
-            
-         elsif Current_Mode = LED_On then
-            GPIO.Digital_Write (Pin_Num, GPIO.High);
-         end if; 
+          select
+             accept Mode (Mode_Value : LED_Modes) do
+                Current_Mode := Mode_Value;
+             end Mode;
+         else 
+             if Current_Mode = LED_Off then
+                GPIO.Digital_Write (Pin_Num, GPIO.Low);
+                
+             elsif Current_Mode = LED_Blink then
+                GPIO.Digital_Write (Pin_Num, GPIO.High);
+                delay Duration (Blink_Delay);
+                GPIO.Digital_Write (Pin_Num, GPIO.Low);
+                delay Duration (Blink_Delay);
+                
+             elsif Current_Mode = LED_On then
+                GPIO.Digital_Write (Pin_Num, GPIO.High);
+             end if;
+
+        end select;
       end loop;
    end Blinking_Light;
   
