@@ -13,3 +13,5 @@ compile with: <br/>
 ## running
 
 run with: `sudo ./obj/blink_example`
+
+Click the button to change the blinking patten between Off, Blinking and On.
